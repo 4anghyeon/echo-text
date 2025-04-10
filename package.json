@@ -1,6 +1,6 @@
 {
   "name": "echo-text",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "A lightweight javascript/typescript library that creates typewriter effects by typing characters one by one, line by line",
   "main": "dist/index.js",
   "module": "dist/index.esm.js",
@@ -17,22 +17,10 @@
     "check": "biome check src/",
     "prepublishOnly": "pnpm run build"
   },
-  "keywords": [
-    "typing",
-    "effect",
-    "animation",
-    "text",
-    "streaming",
-    "character",
-    "sequential"
-  ],
+  "keywords": ["typing", "effect", "animation", "text", "streaming", "character", "sequential"],
   "author": "4anghyeon",
   "license": "MIT",
-  "files": [
-    "dist",
-    "README.md",
-    "LICENSE"
-  ],
+  "files": ["dist", "README.md", "LICENSE"],
   "packageManager": "pnpm@10.8.0",
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
