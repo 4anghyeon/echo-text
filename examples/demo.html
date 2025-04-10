@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>echo-text Demo</title>
+    <style>
+      body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+        line-height: 1.6;
+      }
+
+      .container {
+        margin-top: 20px;
+      }
+
+      .demo {
+        margin-bottom: 40px;
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        background-color: #f9f9f9;
+      }
+
+      .output {
+        min-height: 100px;
+        padding: 15px;
+        margin: 15px 0;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        background-color: #fff;
+        font-family: monospace;
+        white-space: pre-wrap;
+      }
+
+      .controls {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 15px;
+      }
+
+      button {
+        padding: 8px 16px;
+        background-color: #4a7bff;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.2s;
+      }
+
+      button:hover {
+        background-color: #3a6ae6;
+      }
+
+      button:disabled {
+        background-color: #cccccc;
+        cursor: not-allowed;
+      }
+
+      h1, h2 {
+        color: #333;
+      }
+
+      .status {
+        font-size: 14px;
+        color: #666;
+        margin-top: 10px;
+      }
+
+      .code {
+        background-color: #f4f4f4;
+        padding: 15px;
+        border-radius: 4px;
+        overflow-x: auto;
+        margin: 15px 0;
+      }
+
+      pre {
+        margin: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>echo-text Demo</h1>
+    <p>A lightweight TypeScript library that creates typewriter effects by typing characters one by one.</p>
+
+    <div class="container">
+      <!-- Demo 1: Basic Usage -->
+      <div class="demo">
+        <h2>Basic Usage</h2>
+        <div class="controls">
+          <button id="demo1-start">Start</button>
+          <button id="demo1-pause">Pause</button>
+          <button id="demo1-resume">Resume</button>
+          <button id="demo1-reset">Reset</button>
+        </div>
+        <div id="demo1-output" class="output"></div>
+        <div id="demo1-status" class="status">Status: Ready</div>
+      </div>
+
+      <!-- Demo 2: Dynamic Speed -->
+      <div class="demo">
+        <h2>Dynamic Speed</h2>
+        <p>Lines with "fast" type faster, lines with "slow" type slower.</p>
+        <div class="controls">
+          <button id="demo2-start">Start</button>
+          <button id="demo2-pause">Pause</button>
+          <button id="demo2-resume">Resume</button>
+        </div>
+        <div id="demo2-output" class="output"></div>
+      </div>
+
+      <!-- Demo 3: Adding Lines -->
+      <div class="demo">
+        <h2>Adding Lines</h2>
+        <div class="controls">
+          <button id="demo3-start">Start</button>
+          <button id="demo3-add">Add More Lines</button>
+        </div>
+        <div id="demo3-output" class="output"></div>
+      </div>
+    </div>
+
+    <!-- Include the library using ESM modules -->
+    <script type="module">
+      // Import the EchoText class from the ESM bundle
+      import { EchoText } from '../dist/index.esm.js';
+      // Demo 1: Basic Usage
+      (function() {
+        const outputEl = document.getElementById('demo1-output');
+        const statusEl = document.getElementById('demo1-status');
+
+        // Create EchoText instance
+        const typer = new EchoText([
+          'Welcome to echo-text!',
+          'This is a simple typewriter effect library.',
+          'You can control typing with start, pause, resume, and reset.'
+        ], 50);
+
+        // Event listeners
+        typer.on('update', ({ text, completedLines, lineIndex }) => {
+          // 현재 라인과 완료된 라인들을 함께 표시
+          let output = '';
+
+          // 완료된 라인들 표시
+          if (completedLines.length > 0) {
+            output += completedLines.join('<br>');
+            output += '<br>';
+          }
+
+          // 현재 타이핑 중인 라인 표시
+          if (text) {
+            output += text;
+          }
+
+          outputEl.innerHTML = output;
+        });
+
+        typer.on('complete', () => {
+          statusEl.textContent = 'Status: Completed';
+        });
+
+        // Update status display
+        function updateStatus() {
+          const status = typer.getStatus();
+          let statusText = 'Status: ';
+
+          if (status.isRunning) {
+            statusText += status.isPaused ? 'Paused' : 'Running';
+          } else {
+            statusText += 'Ready';
+          }
+
+          statusText += ` (Line ${status.currentLineIndex + 1}/${status.totalLines})`;
+          statusEl.textContent = statusText;
+        }
+
+        // Control buttons
+        document.getElementById('demo1-start').addEventListener('click', () => {
+          typer.reset();
+          typer.start();
+          updateStatus();
+        });
+
+        document.getElementById('demo1-pause').addEventListener('click', () => {
+          typer.pause();
+          updateStatus();
+        });
+
+        document.getElementById('demo1-resume').addEventListener('click', () => {
+          typer.resume();
+          updateStatus();
+        });
+
+        document.getElementById('demo1-reset').addEventListener('click', () => {
+          typer.reset();
+          outputEl.innerHTML = '';
+          updateStatus();
+        });
+
+        // Update status periodically
+        setInterval(updateStatus, 100);
+      })();
+
+      // Demo 2: Dynamic Speed
+      (function() {
+        const outputEl = document.getElementById('demo2-output');
+
+        // Speed calculator function
+        const speedCalculator = (line) => {
+          if (line.includes('fast')) {
+            return 20; // 20ms between characters
+          } else if (line.includes('slow')) {
+            return 150; // 150ms between characters
+          }
+          return 70; // Default speed
+        };
+
+        // Create EchoText instance
+        const typer = new EchoText([
+          'This is a normal speed line.',
+          'This is a fast typing line that shows quick typing!',
+          'This is a slow typing line... notice how characters appear more gradually...',
+          'Back to normal speed again.'
+        ], speedCalculator);
+
+        // Event listeners
+        typer.on('update', ({ text, completedLines, lineIndex }) => {
+          // 현재 라인과 완료된 라인들을 함께 표시
+          let output = '';
+
+          // 완료된 라인들 표시
+          if (completedLines.length > 0) {
+            output += completedLines.join('<br>');
+            output += '<br>';
+          }
+
+          // 현재 타이핑 중인 라인 표시
+          if (text) {
+            output += text;
+          }
+
+          outputEl.innerHTML = output;
+        });
+
+        // Control buttons
+        document.getElementById('demo2-start').addEventListener('click', () => {
+          typer.reset();
+          outputEl.innerHTML = '';
+          typer.start();
+        });
+
+        document.getElementById('demo2-pause').addEventListener('click', () => {
+          typer.pause();
+        });
+
+        document.getElementById('demo2-resume').addEventListener('click', () => {
+          typer.resume();
+        });
+      })();
+
+      // Demo 3: Adding Lines
+      (function() {
+        const outputEl = document.getElementById('demo3-output');
+
+        // Create EchoText instance with initial line
+        const typer = new EchoText(['Initial line - click "Add More Lines" to add content.'], 60);
+
+        // Event listeners
+        typer.on('update', ({ text, completedLines, lineIndex }) => {
+          // 현재 라인과 완료된 라인들을 함께 표시
+          let output = '';
+
+          // 완료된 라인들 표시
+          if (completedLines.length > 0) {
+            output += completedLines.join('<br>');
+            output += '<br>';
+          }
+
+          // 현재 타이핑 중인 라인 표시
+          if (text) {
+            output += text;
+          }
+
+          outputEl.innerHTML = output;
+        });
+
+        // Start button
+        document.getElementById('demo3-start').addEventListener('click', () => {
+          typer.reset();
+          outputEl.innerHTML = '';
+          typer.start();
+        });
+
+        // Add more lines button
+        document.getElementById('demo3-add').addEventListener('click', () => {
+          typer.addLine([
+            'This line was added later.',
+            'You can add lines at any time.',
+            'The typing will continue with the new lines.'
+          ]);
+        });
+      })();
+    </script>
+  </body>
+</html>
