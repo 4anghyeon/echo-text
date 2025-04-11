@@ -54,7 +54,7 @@ export class EchoText {
 
     if (this.status === EchoTextStatus.PAUSED) {
       this.status = EchoTextStatus.RUNNING;
-      this.typeNextChar();
+      this.process();
       return this;
     }
 
@@ -63,7 +63,7 @@ export class EchoText {
     this.currentCharIndex = 0;
     this.currentLine = '';
 
-    this.typeNextChar();
+    this.process();
     return this;
   }
 
@@ -89,7 +89,7 @@ export class EchoText {
   resume(): this {
     if (this.status === EchoTextStatus.PAUSED) {
       this.status = EchoTextStatus.RUNNING;
-      this.typeNextChar();
+      this.process();
     }
     return this;
   }
@@ -212,7 +212,7 @@ export class EchoText {
   /**
    * Type the next character in the sequence
    */
-  private typeNextChar(): void {
+  private process(): void {
     if (this.status !== EchoTextStatus.RUNNING || this.currentLineIndex >= this.lineQueue.length) {
       return;
     }
@@ -242,7 +242,7 @@ export class EchoText {
           completedLines: [...this.completedLines],
         });
       } else {
-        // End of line
+        // line end !!
         if (this.intervalId) {
           clearInterval(this.intervalId);
           this.intervalId = null;
@@ -258,6 +258,7 @@ export class EchoText {
           completedLines: [...this.completedLines],
         });
 
+        // go to next line or complete whole process
         if (this.currentLineIndex + 1 < this.lineQueue.length) {
           // Move to next line
           this.currentLineIndex++;
@@ -265,7 +266,7 @@ export class EchoText {
           this.currentLine = '';
 
           // Start typing the next line
-          this.typeNextChar();
+          this.process();
         } else {
           // All lines completed
           this.status = EchoTextStatus.COMPLETED;
