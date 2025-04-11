@@ -127,8 +127,9 @@
 
     <!-- Include the library using ESM modules -->
     <script type="module">
-      // Import the EchoText class from the ESM bundle
-      import { EchoText } from '../dist/index.esm.js';
+      // Import the EchoText class and EchoTextStatus enum from the ESM bundle
+      import { EchoText, EchoTextStatus } from '../dist/index.esm.js';
+
       // Demo 1: Basic Usage
       (function() {
         const outputEl = document.getElementById('demo1-output');
@@ -169,10 +170,22 @@
           const status = typer.getStatus();
           let statusText = 'Status: ';
 
-          if (status.isRunning) {
-            statusText += status.isPaused ? 'Paused' : 'Running';
-          } else {
-            statusText += 'Ready';
+          switch (status.status) {
+            case EchoTextStatus.IDLE:
+              statusText += 'Ready';
+              break;
+            case EchoTextStatus.RUNNING:
+              statusText += 'Running';
+              break;
+            case EchoTextStatus.PAUSED:
+              statusText += 'Paused';
+              break;
+            case EchoTextStatus.COMPLETED:
+              statusText += 'Completed';
+              break;
+            default:
+              statusText += 'Unknown';
+              break;
           }
 
           statusText += ` (Line ${status.currentLineIndex + 1}/${status.totalLines})`;
