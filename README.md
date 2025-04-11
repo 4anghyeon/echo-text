@@ -1,6 +1,6 @@
 # EchoText
 
-[![npm version](https://img.shields.io/npm/v/echo-text.svg)](https://www.npmjs.com/package/echo-text)
+![NPM Version](https://img.shields.io/npm/v/echo-text)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
 A lightweight TypeScript library that creates typewriter effects by displaying characters one by one, line by line. Perfect for creating engaging text animations on websites and applications.
