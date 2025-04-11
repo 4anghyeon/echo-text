@@ -1,4 +1,9 @@
-import { type EchoTextEvent, EchoTextStatus, type SpeedCalculator } from './types';
+import {
+  type EchoTextEvent,
+  EchoTextStatus,
+  type EventDataMap,
+  type SpeedCalculator,
+} from './types';
 
 /**
  * EchoText creates a typewriter effect by displaying characters one by one
@@ -6,18 +11,20 @@ import { type EchoTextEvent, EchoTextStatus, type SpeedCalculator } from './type
 export class EchoText {
   private readonly lineQueue: string[] = [];
   private readonly speed: number | SpeedCalculator;
+  private readonly eventListeners: {
+    [K in EchoTextEvent]: Array<(data: EventDataMap[K]) => void>;
+  } = {
+    update: [],
+    'line-complete': [],
+    complete: [],
+  };
+
   private completedLines: string[] = [];
   private currentLineIndex = 0;
   private currentCharIndex = 0;
   private status: EchoTextStatus = EchoTextStatus.IDLE;
   private currentLine = '';
   private intervalId: ReturnType<typeof setInterval> | null = null;
-  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
-  private eventListeners: Record<EchoTextEvent, Array<(data: any) => void>> = {
-    update: [],
-    'line-complete': [],
-    complete: [],
-  };
 
   /**
    * Create a new EchoText instance
@@ -189,8 +196,7 @@ export class EchoText {
    * @param callback Function to call when the event occurs
    * @returns The EchoText instance for chaining
    */
-  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
-  on(event: EchoTextEvent, callback: (data: any) => void): this {
+  on<E extends EchoTextEvent>(event: E, callback: (data: EventDataMap[E]) => void): this {
     if (this.eventListeners[event]) {
       this.eventListeners[event].push(callback);
     }
@@ -287,8 +293,7 @@ export class EchoText {
    * @param event Event type
    * @param data Data to pass to the listeners
    */
-  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
-  private emitEvent(event: EchoTextEvent, data: any): void {
+  private emitEvent<E extends EchoTextEvent>(event: E, data: EventDataMap[E]): void {
     if (this.eventListeners[event]) {
       for (const callback of this.eventListeners[event]) {
         callback(data);
