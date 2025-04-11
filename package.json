@@ -1,6 +1,6 @@
 {
   "name": "echo-text",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A lightweight javascript/typescript library that creates typewriter effects by typing characters one by one, line by line",
   "main": "dist/index.js",
   "module": "dist/index.esm.js",
@@ -17,6 +17,14 @@
     "check": "biome check src/",
     "prepublishOnly": "pnpm run build"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/4anghyeon/echo-text.git"
+  },
+  "bugs": {
+    "url": "https://github.com/4anghyeon/echo-text/issues"
+  },
+  "homepage": "https://github.com/4anghyeon/echo-text#readme",
   "keywords": ["typing", "effect", "animation", "text", "streaming", "character", "sequential"],
   "author": "4anghyeon",
   "license": "MIT",
