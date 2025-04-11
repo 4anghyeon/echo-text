@@ -3,7 +3,7 @@
 [![npm version](https://img.shields.io/npm/v/echo-text.svg)](https://www.npmjs.com/package/echo-text)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
-A lightweight TypeScript library that creates typewriter effects by displaying characters one by one. Perfect for creating engaging text animations on websites and applications.
+A lightweight TypeScript library that creates typewriter effects by displaying characters one by one, line by line. Perfect for creating engaging text animations on websites and applications.
 
 ## Features
 
@@ -20,11 +20,10 @@ A lightweight TypeScript library that creates typewriter effects by displaying c
 ### NPM
 ```bash
 npm install echo-text
-```
-
-### Yarn
-```bash
+# or
 yarn add echo-text
+# or
+pnpm install echo-text
 ```
 
 ## Usage
@@ -35,13 +34,13 @@ yarn add echo-text
 import { EchoText } from 'echo-text';
 
 // Create an instance with text lines and speed (in milliseconds)
-const typer = new EchoText([
+const et = new EchoText([
   'Welcome to EchoText!', 
   'This is a typewriter effect library.'
 ], 50);
 
 // Listen for updates
-typer.on('update', ({ text, completedLines }) => {
+et.on('update', ({ text, completedLines }) => {
   // Display completed lines
   if (completedLines.length > 0) {
     console.log(completedLines.join('\n'));
@@ -54,12 +53,12 @@ typer.on('update', ({ text, completedLines }) => {
 });
 
 // Start typing
-typer.start();
+et.start();
 ```
 
 ### Dynamic Speed
 
-You can adjust typing speed dynamically based on the content:
+You can adjust typing speed dynamically based on the line content.
 
 ```typescript
 const speedCalculator = (line: string): number => {
@@ -71,37 +70,37 @@ const speedCalculator = (line: string): number => {
   return 70; // Default speed
 };
 
-const typer = new EchoText([
+const et = new EchoText([
   'This types at normal speed.',
   'This types fast and shows quick typing!',
   'This types slow... notice how it appears more gradually...'
 ], speedCalculator);
 
-typer.start();
+et.start();
 ```
 
 ### Control Methods
 
 ```typescript
 // Start typing
-typer.start();
+et.start();
 
 // Pause typing
-typer.pause();
+et.pause();
 
 // Resume typing
-typer.resume();
+et.resume();
 
 // Stop typing
-typer.stop();
+et.stop();
 
 // Reset to beginning
-typer.reset();
+et.reset();
 
 // Add more lines dynamically
-typer.addLine('A new line added later.');
+et.addLine('A new line added later.');
 // Or add multiple lines
-typer.addLine([
+et.addLine([
   'First new line',
   'Second new line'
 ]);
@@ -111,25 +110,19 @@ typer.addLine([
 
 ```typescript
 // Called whenever text is updated
-typer.on('update', ({ text, completedLines, lineIndex, charIndex }) => {
+et.on('update', ({ text, completedLines, lineIndex, charIndex }) => {
   console.log('Current text:', text);
 });
 
 // Called when a line is completed
-typer.on('line-complete', ({ line, lineIndex, completedLines }) => {
+et.on('line-complete', ({ line, lineIndex, completedLines }) => {
   console.log('Line completed:', line);
 });
 
 // Called when all lines are completed
-typer.on('complete', ({ completedLines }) => {
+et.on('complete', ({ completedLines }) => {
   console.log('All lines completed!');
 });
-
-// Remove event listener
-const updateHandler = ({ text }) => console.log(text);
-typer.on('update', updateHandler);
-// Later:
-typer.off('update', updateHandler);
 ```
 
 ## API Reference
@@ -157,7 +150,6 @@ new EchoText(lines: string[], speed: number | SpeedCalculator)
 | `getCompletedLines()` | Get all completed lines | `string[]` |
 | `getStatus()` | Get the current status of the typing effect | `object` |
 | `on(event, callback)` | Add an event listener | `this` |
-| `off(event, callback)` | Remove an event listener | `this` |
 
 ### Events
 
@@ -182,7 +174,7 @@ EchoText works in all modern browsers:
 <script type="module">
   import { EchoText } from './dist/echo-text.js';
   
-  const typer = new EchoText(['Hello, world!'], 50);
+  const et = new EchoText(['Hello, world!'], 50);
   // ...
 </script>
 ```
@@ -194,9 +186,9 @@ EchoText works in all modern browsers:
 <script src="./dist/echo-text.umd.js"></script>
 
 <script>
-  // Access via window.EchoText.EchoText
-  const typer = new window.EchoText.EchoText(['Hello, world!'], 50);
-  // ...
+    // Access via window.EchoText.EchoText
+    const et = new window.EchoText.EchoText(['Hello, world!'], 50);
+    // ...
 </script>
 ```
 
