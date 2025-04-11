@@ -198,20 +198,6 @@ export class EchoText {
   }
 
   /**
-   * Remove an event listener
-   * @param event Event type
-   * @param callback The callback function to remove
-   * @returns The EchoText instance for chaining
-   */
-  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
-  off(event: EchoTextEvent, callback: (data: any) => void): this {
-    if (this.eventListeners[event]) {
-      this.eventListeners[event] = this.eventListeners[event].filter((cb) => cb !== callback);
-    }
-    return this;
-  }
-
-  /**
    * Calculate the typing speed for the current line
    * @param line The line to calculate speed for
    * @returns The typing speed in milliseconds
