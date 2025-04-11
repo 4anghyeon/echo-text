@@ -214,6 +214,10 @@ export class EchoText {
    */
   private process(): void {
     if (this.status !== EchoTextStatus.RUNNING || this.currentLineIndex >= this.lineQueue.length) {
+      this.status = EchoTextStatus.COMPLETED;
+      this.emitEvent('complete', {
+        completedLines: [...this.completedLines],
+      });
       return;
     }
 

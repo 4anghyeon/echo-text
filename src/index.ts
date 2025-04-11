@@ -1,2 +1,2 @@
 export { EchoText } from './core';
-export type { SpeedCalculator, EchoTextEvent } from './types';
+export { type SpeedCalculator, type EchoTextEvent, EchoTextStatus } from './types';
