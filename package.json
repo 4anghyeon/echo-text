@@ -1,6 +1,6 @@
 {
   "name": "echo-text",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "A lightweight javascript/typescript library that creates typewriter effects by typing characters one by one, line by line",
   "main": "dist/index.js",
   "module": "dist/index.esm.js",

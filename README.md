@@ -3,6 +3,22 @@
 ![NPM Version](https://img.shields.io/npm/v/echo-text)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
+![intro.webp](intro.webp)
+
+```javascript
+const typer = new EchoText([
+  'Hello, thank you for using EchoText!',
+  'This library helps you easily implement typewriter effects.',
+  'Now add awesome typing effects to your website.'
+], 70);
+
+typer.on('update', ({ text, completedLines }) => {
+  // Handle update your own UI with event listener
+});
+
+typer.start();
+```
+
 A lightweight TypeScript library that creates typewriter effects by displaying characters one by one, line by line. Perfect for creating engaging text animations on websites and applications.
 
 ## Features
