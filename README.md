@@ -23,7 +23,7 @@ npm install echo-text
 # or
 yarn add echo-text
 # or
-pnpm install echo-text
+pnpm add echo-text
 ```
 
 ## Usage
